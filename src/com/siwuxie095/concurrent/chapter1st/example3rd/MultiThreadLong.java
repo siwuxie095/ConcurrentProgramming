@@ -1,4 +1,4 @@
-package com.siwuxie095.concurrent.chapter1st.example2nd;
+package com.siwuxie095.concurrent.chapter1st.example3rd;
 
 /**
  * @author Jiajing Li
