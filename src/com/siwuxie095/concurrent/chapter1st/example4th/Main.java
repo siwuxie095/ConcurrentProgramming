@@ -2,17 +2,26 @@ package com.siwuxie095.concurrent.chapter1st.example4th;
 
 /**
  * @author Jiajing Li
- * @date 2020-01-07 23:18:54
+ * @date 2020-08-18 08:45:37
  */
 public class Main {
 
-
+    /**
+     * 回到 Java：JMM
+     *
+     * JMM 即 Java 内存模型，Java Memory Model
+     *
+     * 由于并行程序要比串行程序复杂很多，其中一个重要原因是并发程序下数据访问的一致性和安全性问题
+     * 将会受到严重挑战。如何保证一个线程可以看到正确的数据呢？这个问题看起来很白痴。对于串行程序
+     * 来说，根本就是小菜一碟，如果你读取一个变量，这个变量的值是 1，那么你读到的一定是 1，就这么
+     * 简单的问题在并行程序中居然变得复杂起来。事实上，如果不加控制地任由线程胡乱并行，即使原本是
+     * 1 的数值，也有可能读到 2。因此，需要在深入了解并行机制的前提下，再定义一种规则，保证多个线
+     * 程间可以有效地、正确地协同工作。而 JMM 也就是为此而生的。
+     *
+     * JMM 的关键技术点都是围绕多线程的原子性、可见性和有序性来建立的。
+     */
     public static void main(String[] args) {
-        new Thread(new MultiThreadLong.ChangeT(111L)).start();
-        new Thread(new MultiThreadLong.ChangeT(-999L)).start();
-        new Thread(new MultiThreadLong.ChangeT(333L)).start();
-        new Thread(new MultiThreadLong.ChangeT(-444L)).start();
-        new Thread(new MultiThreadLong.ReadT()).start();
+
     }
 
 }
