@@ -51,6 +51,8 @@ public class Main {
      *
      * 如果觉得一个线程不那么重要，或者优先级非常低，而且又害怕它会占用太多的 CPU 资源，那么可以在适当的时候调用
      * Thread.yield()，给予其他线程更多的工作机会。
+     *
+     * 另外：凡是抛 InterruptedException 的方法，都会清除中断标志位。
      */
     public static void main(String[] args) {
     }
