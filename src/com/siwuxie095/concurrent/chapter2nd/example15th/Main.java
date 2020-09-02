@@ -26,7 +26,7 @@ public class Main {
      *
      * PS: 正常情况下，只会得到第（2）种结果。（1）和（3）只是一种可能。
      *
-     * 改进：改进的方法很简单，使用线程安全的 Vector 代替 ArrayList 即可。
+     * 改进：改进的方法很简单，使用线程安全的 Vector 代替 ArrayList 即可（参见 VectorMultiThread 示例）。
      */
     public static void main(String[] args) {
 
