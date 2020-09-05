@@ -38,8 +38,10 @@ public class Main {
      * （3）直接作用于实例方法：相当于对当前实例加锁，进入同步代码前要获得当前实例对锁，也即（1）。
      * （4）直接作用于静态方法：相当于对当前类加锁，进入同步代码前要获得当前类对锁，也即 （2）。
      *
-     * 其实也就两种表现形式，作用于给定对象或给定类（实际是：给定类的 Class 对象），也就是说（3）（4）是（1）（2）
+     * 本质上就两种表现形式，作用于给定对象或给定类（实际是：给定类的 Class 对象），也就是说（3）（4）是（1）（2）
      * 的延伸。
+     *
+     * PS：synchronized 也称为内部锁（或者监视器锁，或者 Monitor 锁），就表现形式来说，分为对象锁和类锁两种。
      *
      * 这里分别以 AccountingWithSync1st、AccountingWithSync2nd、AccountingWithSync3rd、
      * AccountingWithSync4th 为例，展现这四种表现形式。每次当线程进入被 synchronized 包裹的代码段，就都会

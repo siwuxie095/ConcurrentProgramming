@@ -12,8 +12,9 @@ public class Main {
      * 重入锁可以完全替代 synchronized 关键字。在 JDK 5.0 的早期版本中，重入锁的性能远远好于 synchronized，
      * 但从 JDK 6.0 开始，JDK 在 synchronized 上做了大量的优化，使得两者的性能差距并不大。
      *
-     * PS：其实 synchronized 也是重入锁，只不过一般的叫法是直接说 synchronized，而说到重入锁时，一般都是指
-     * ReentrantLock，但是具体来说，还是要结合上下文的语境去理解。（重入锁，也称 可重入锁。）
+     * PS：其实 synchronized 也是重入锁，只不过一般的叫法是直接说 synchronized 或者内部锁（或者监视器锁，或
+     * 者 Monitor 锁）， 而说到重入锁时，一般都是指 ReentrantLock，但是具体来说，还是要结合上下文的语境去理解。
+     * （另外：重入锁，也称 可重入锁。）
      *
      * 重入锁使用 java.util.concurrent.locks.ReentrantLock 类来实现。以 ReenterLock 为例进行说明，本例
      * 使用重入锁保护临界区资源 i，确保多线程对 i 操作的安全性。从这段代码可以看到，与 synchronized 相比，重
