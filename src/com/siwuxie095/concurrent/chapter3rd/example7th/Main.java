@@ -21,9 +21,11 @@ public class Main {
      * 会要求 10 个士兵先集合报道，接着，一起去执行任务。当 10 个士兵把自己手头上的任务都执行完成了，那么
      * 司令才能对外宣布任务完成。
      *
-     * 比 CountDownLatch 略微强大一些，CyclicBarrier 可以接收一个参数作为 barrierAction，它表示当计
-     * 数器一次计数完成后，系统会执行的动作。构造函数如下，其中 parties 表示计数总数，也就是参与的线程总数。
+     * CyclicBarrier 的构造方法如下，其中 parties 表示计数总数，也就是参与的线程总数。比 CountDownLatch
+     * 略微强大一些，CyclicBarrier 还可以接收一个参数作为 barrierAction，它表示当计数器一次计数完成后，
+     * 系统会执行的动作。
      *
+     * public CyclicBarrier(int parties)
      * public CyclicBarrier(int parties, Runnable barrierAction)
      *
      * 以 CyclicBarrierDemo 为例，演示了司令命令士兵完成任务的场景。先创建一个 CyclicBarrier 实例，并
@@ -36,7 +38,8 @@ public class Main {
      * 第二次调用 CyclicBarrier.await()，所有士兵线程都会在这一行等待，当计数器达到指标时，表示所有士兵
      * 完成任务，同时会执行 BarrierAction。此时，整个程序执行完毕。
      *
-     * PS：每一次调用 CyclicBarrier.await()，所有线程都会等待计数器从零打到满。
+     * PS：每一次调用 CyclicBarrier.await()，所有线程都会等待计数器从零打到满。如果传入了 barrierAction
+     * 的话，计数器打到满后，barrierAction 会执行一次。
      *
      * CyclicBarrier.await() 可能会抛出两个异常。一个是 InterruptedException，也就是在等待过程中，线程
      * 被中断，应该说这是一个非常通用的异常。大部分迫使线程等待的方法都可能会抛出这个异常，使得线程在等待时依然
