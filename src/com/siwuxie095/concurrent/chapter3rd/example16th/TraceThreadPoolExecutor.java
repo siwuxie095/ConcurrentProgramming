@@ -6,6 +6,7 @@ import java.util.concurrent.*;
  * @author Jiajing Li
  * @date 2020-09-07 22:37:38
  */
+@SuppressWarnings("all")
 class TraceThreadPoolExecutor extends ThreadPoolExecutor {
 
     public TraceThreadPoolExecutor(int corePoolSize,
