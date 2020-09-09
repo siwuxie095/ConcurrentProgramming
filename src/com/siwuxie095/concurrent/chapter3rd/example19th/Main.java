@@ -20,6 +20,8 @@ public class Main {
      *
      * public static Map map = Collections.synchronizedMap(new HashMap<>());
      *
+     * PS：Collections.synchronizedMap() 可以包装任意 Map，不只是 HashMap。
+     *
      * Collections.synchronizedMap 会生成一个名为 SynchronizedMap 的 Map，它使用委托，将自己所有 Map
      * 相关的功能交给传入的 HashMap 实现，而自己则主要负责保证线程安全。
      *
@@ -51,9 +53,8 @@ public class Main {
      * 一个更加专业的并发 HashMap 是 ConcurrentHashMap，位于 java.util.concurrent 包内。它专门为并发进行了
      * 性能优化，因此，更加适合多线程的场合。
      */
-    public static Map map = Collections.synchronizedMap(new HashMap<>());
     public static void main(String[] args) {
-
+        Map map = Collections.synchronizedMap(new HashMap<>());
     }
 
 }
