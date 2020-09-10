@@ -138,8 +138,6 @@ public class Main {
      */
     public static void main(String[] args) throws InterruptedException {
         BlockingQueue<String> queue = new ArrayBlockingQueue<>(8);
-        queue.take();
-
     }
 
 }
