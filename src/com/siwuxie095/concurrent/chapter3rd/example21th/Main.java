@@ -182,7 +182,9 @@ public class Main {
     public static void main(String[] args) {
         ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
         queue.offer("1");
-        queue.poll();
+        String item = queue.poll();
+        System.out.println(item);
+        queue.offer("2");
     }
 
 }
