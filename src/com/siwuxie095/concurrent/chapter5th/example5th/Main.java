@@ -54,8 +54,8 @@ public class Main {
      *
      * 用 Disruptor 实现生产者-消费者案例
      *
-     * 下面将使用截止到目前的最新版本 disruptor-3.4.2 来展示 Disruptor 的基本使用方法。注意，不同版本的 disruptor
-     * 可能会有细微的差别。
+     * 下面将使用截止到目前（2020/09/21）的最新版本 disruptor-3.4.2 来展示 Disruptor 的基本使用方法。注意，不同
+     * 版本的 disruptor 可能会有细微的差别。
      *
      * Disruptor 官网链接：http://lmax-exchange.github.io/disruptor/
      *
@@ -109,6 +109,82 @@ public class Main {
      * 理核上使用超线程技术模拟两个逻辑核，另外一个逻辑核显然就会受到这种超密集计算的影响而不能正常工作。
      *
      * 在本例中，使用的是 BlockingWaitStrategy。不妨替换一下不同策略，来体验一下不同等待策略的效果。
+     *
+     *
+     * CPU Cache 的优化：解决伪共享问题
+     *
+     * 除了使用 CAS 和提供了各种不同的等待策略来提高系统的吞吐量外。Disruptor 大有将优化进行到底的气势，它甚至尝试解决
+     * CPU 缓存的伪共享问题。
+     *
+     * 什么是伪共享问题？众所周知，为了提高 CPU 的速度，CPU 有一个高速缓存 Cache。在高速缓存中，读写数据的最小单位是缓
+     * 存行（Cache Line），它是从主存（memory）复制到缓存（Cache）的最小单位，一般为 32 字节到 128 字节。
+     *
+     * PS：每一个 CPU 都有一个高速缓存。
+     *
+     * 如果两个变量存放在一个缓存行时，在多线程访问中，可能会相互影响彼此的性能。假设 X 和 Y 在同一个缓存行，运行在 CPU1
+     * 上的线程更新了 X，那么 CPU2 上的缓存行就会失效。CPU2 上同一行的 Y 即使没有修改也会变成无效，导致 Cache 无法命中。
+     * 接着，如果CPU2 上的线程更新了 Y（此时，CPU2 重新从主存载入同一行的 X 和 Y），则导致 CPU1 上的缓存行又失效（同一
+     * 行的 X 又变得无法访问）。这种情况反反复复发生，无疑是一个潜在的性能杀手，如果 CPU 经常不能命中缓存，那么系统的吞吐
+     * 量就会急剧下降。
+     *
+     * 为了使这种情况不发生，一种可行的做法是在 X 变量的前后空间都先占据一定的位置（把它叫做 padding 吧，用来填充用的）。
+     * 这样，当内存被读入缓存中时，这个缓存行中，只有 X 一个变量是实际有效的，因此就不会发生多个线程同时修改缓存行中不同
+     * 变量导致全体变量失效的情况。
+     *
+     * 以 FalseSharing 为例，来实现上述目的。这里使用四个线程，即 将 NUM_THREADS 设为 4（因为所使用的电脑是四个物理
+     * 核的，可以根据自己电脑的硬件配置修改该参数）。然后准备一个 VolatileLong 数组，数组元素个数和线程数量保持一致。
+     * 每个线程都会访问自己对应的 VolatileLong 数组中的元素（线程和数组下标对应）。
+     *
+     * 最关键的一点就是 VolatileLong。其中准备了 7 个 long 型变量用来填充缓存。实际上，只有 VolatileLong.value 会被
+     * 使用。而 p1、p2、p3 等仅仅用于将 VolatileLong 数组中第一个 VolatileLong.value 和第二个 VolatileLong.value
+     * 分开，防止它们进入同一个缓存行。
+     *
+     * 这里使用 JDK 8 的 64 位版本。运行代码，输出如下：
+     *
+     * duration: 17267
+     *
+     * 这说明系统花费了 17 秒完成了所有的操作。如果注释掉 private long p1, p2, p3, p4, p5, p6, p7; 填充变量这一行。
+     * 也就是运行系统中 VolatileLong.value 放置在同一个缓存行中。运行代码，输出如下：
+     *
+     * duration: 30328
+     *
+     * 花费了 30 秒。显然，这一行填充对系统的性能是非常有帮助的。
+     *
+     * 注意：由于各个 JDK 版本内部实现不一致，在某些 JDK 版本中，会自动优化不使用的字段。这将直接导致这种 padding 的伪
+     * 共享解决方案失效（如：JDK 8 的某些小版本，目前使用的版本没有出现这个问题）。
+     *
+     * Disruptor 框架充分考虑了这个问题，它的核心组件 Sequence 会被非常频繁的访问（每次入队，它都会被加 1）。其基本结构
+     * 如下：
+     *
+     * class LhsPadding
+     * {
+     *     protected long p1, p2, p3, p4, p5, p6, p7;
+     * }
+     *
+     * class Value extends LhsPadding
+     * {
+     *     protected volatile long value;
+     * }
+     *
+     * class RhsPadding extends Value
+     * {
+     *     protected long p9, p10, p11, p12, p13, p14, p15;
+     * }
+     *
+     *public class Sequence extends RhsPadding
+     * {
+     *     // 省略具体实现
+     * }
+     *
+     * 虽然在 Sequence 中，主要使用的只有 value。但是通过 LhsPadding 和 RhsPadding，在这个 value 的前后安置了一些
+     * 占位空间，使得 value 可以无冲突的存在于缓存中。
+     *
+     * 此外，对于 Disruptor 的环形缓冲区 RingBuffer，它内部的数组是通过以下语句构造的：
+     *
+     * this.entries = new Object[sequencer.getBufferSize() + 2 * BUFFER_PAD];
+     *
+     * 注意，这里实际产生的数组大小是缓冲区实际大小再加上两倍的 BUFFER_PAD。这就相当于在这个数组的头部和尾部两段各增加了
+     * BUFFER_PAD 个填充，使得整个数组被载入 Cache 时不会受到其他变量的影响而失效。
      */
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
