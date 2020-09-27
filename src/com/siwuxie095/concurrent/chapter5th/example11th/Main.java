@@ -18,6 +18,8 @@ public class Main {
      *
      * PS：下面的整体内容都是网络 IO，没有涉及到文件 IO。
      *
+     * 另：标准 IO 或者普通 IO 或者传统 IO，也叫做 BIO，是 Blocking IO 的简称，即 阻塞 IO。
+     *
      *
      *
      * 基于 Socket 的服务端的多线程模式
