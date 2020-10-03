@@ -41,6 +41,10 @@ public class Main {
      * （5）ConsistentHashingRoutingLogic 一致性哈希路由
      * ...
      * ...
+     *
+     * PS：本例需要在 example3rd 的基础上新增两个 jar 包，如下：
+     * （1）com.typesafe.akka » akka-agent_2.13 » 2.5.31
+     * （2）org.scala-stm » scala-stm_2.13 » 0.9.1
      */
     public static void main(String[] args) {
 
