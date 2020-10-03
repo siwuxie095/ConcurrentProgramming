@@ -19,6 +19,12 @@ public class Main {
      * （5）com.typesafe.akka » akka-actor-typed_2.13 » 2.5.31
      * 链接：https://mvnrepository.com/artifact/com.typesafe.akka
      *
+     * 另：
+     * （1）Akka 2.4.x 和 2.5.x 版本之间的区别：
+     * https://doc.akka.io/docs/akka/2.5/project/migration-guide-2.4.x-2.5.x.html
+     * （2）Akka 2.5.x 和 2.6.x 版本之间的区别：
+     * https://doc.akka.io/docs/akka/current/project/migration-guide-2.5.x-2.6.x.html
+     *
      * 其中定义了一个 Greeter Actor，它继承自 UntypedAbstractActor（Akka 的核心成员之一）。UntypedAbstractActor
      * 就是所说的 Actor，之所以这里强调是无类型的，那是因为在 Akka 中，支持一种有类型的 Actor，即 AbstractBehavior。
      * 有类型的 Actor 可以使用系统中的其他类型构造，可以缓解 Java 单继承的问题。因为在继承 UntypedAbstractActor 后，
