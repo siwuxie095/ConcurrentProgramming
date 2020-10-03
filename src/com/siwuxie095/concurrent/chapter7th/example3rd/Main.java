@@ -11,17 +11,12 @@ public class Main {
      *
      * 以 Greeter、HelloWorld 等类为例，进一步了解 Akka 的开发。
      *
-     * PS：这里使用 Akka 截止到目前（2020/10/02）的最新版本 2.6.9。共需要引入如下九个 jar 包：
-     * （1）com.typesafe.akka » akka-actor_2.13 » 2.6.9
-     * （2）com.typesafe » config » 1.4.0
-     * （3）org.scala-lang » scala-library »	2.13.3
+     * PS：这里使用 Akka 的 2.6.9 版本。共需要引入如下九个 jar 包：
+     * （1）com.typesafe.akka » akka-actor_2.13 » 2.5.31
+     * （2）com.typesafe » config » 1.3.3
+     * （3）org.scala-lang » scala-library » 2.13.0
      * （4）org.scala-lang.modules » scala-java8-compat_2.13 » 0.9.0
-     * （5）com.typesafe.akka » akka-actor-typed_2.13 » 2.6.9
-     * （6）com.typesafe.akka » akka-slf4j_2.13 » 2.6.9
-     * （7）org.slf4j » slf4j-api » 1.7.30
-     * （8）ch.qos.logback » logback-classic » 1.2.3
-     * （9）ch.qos.logback » logback-core » 1.2.3
-     * 注意：要么仅引入前三个 jar 包即可，第四个可选，一旦引入第五个，那么所有都要引入。
+     * （5）com.typesafe.akka » akka-actor-typed_2.13 » 2.5.31
      * 链接：https://mvnrepository.com/artifact/com.typesafe.akka
      *
      * 其中定义了一个 Greeter Actor，它继承自 UntypedAbstractActor（Akka 的核心成员之一）。UntypedAbstractActor
