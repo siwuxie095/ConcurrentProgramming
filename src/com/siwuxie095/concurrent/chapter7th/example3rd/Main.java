@@ -91,6 +91,10 @@ public class Main {
      * 当系统内有多个 Actor 存在时，Akka 会自动在线程池中选择线程来执行 Actor。因此，多个不同的 Actor 有可能会被同
      * 一个线程执行，同时，一个 Actor 也有可能被不同的线程执行。值得注意的是，不要在一个 Actor 中执行耗时的代码，这样
      * 可能会导致其他 Actor 的调度出现问题。
+     *
+     * 参考链接：
+     * （1）https://juejin.im/post/6844904192797065224
+     * （2）https://cloud.tencent.com/developer/article/1435519
      */
     public static void main(String[] args) {
 
